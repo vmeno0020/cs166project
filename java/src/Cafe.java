@@ -709,13 +709,13 @@ public static void Menu(Cafe esql, String authorisedUser){
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
           String stat = "Order recieved"; 
-          List<String> queries = new ArrayList<String>(); 
           
         do{
             System.out.println("\n========= PLACE ORDER =========\n");
             System.out.println("\n1. Add item\n");      
-            System.out.println("\n2. View Total\n");
+            System.out.println("\n2. View Full Menu\n");
             System.out.println("\n3. Place order\n"); 
+            System.out.println("\n4. Browse Order History"); 
             System.out.println("\n9. Cancel Order\n");  
             System.out.println("\n===============================\n");
             //System.out.println("\nSelect a choice: "); 
@@ -727,29 +727,35 @@ public static void Menu(Cafe esql, String authorisedUser){
                 price += getItemPrice(esql, name); 
                 System.out.print("\n Enter comments: "); 
                 String comment = in.readLine(); 
-                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%s', '%s', '%s', '%s')", orderid, name, stat, comment); 
-                queries.add(query2); 
+                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%d', '%s', '%s', '%s')", orderid, name, stat, comment); 
+                esql.executeQuery(query2); 
+                System.out.println("\n Item added!\n")
               }catch(Exception e){
                  System.err.println("\nInvalid item!\n"); 
               }
               break; 
  
-               case 2: System.out.print(price); break; 
+               case 2: PrintFullMenu(esql); break; 
 
                case 3: 
                String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
                esql.executeQuery(query); 
-                  for (String i : queries) {
-               try{
-                  esql.executeQuery(i); 
-               }catch(Exception e) {
-                  System.err.println(e.getMessage()); 
-               }
-         }
-
+               System.out.println("\nOrder successfully placed! Your order ID is: " + orderid + "\n"); 
                it=false; 
                break; 
-               case 9: it=false; break; 
+               case 4: 
+               try{
+                     String history = String.format("SELECT * FROM ORDERS WHERE login = '%s' ORDER BY timeStampRecieved LIMIT 5", authorisedUser); 
+                     esql.executeQueryAndPrintResult(history); 
+                     break; 
+               }catch(Exception e){
+                   System.err.println(e.getMessage()); 
+               }
+        
+               case 9: 
+               String query  = String.format("DELETE * FROM ItemStatus WHERE orderid='%d'", orderid); 
+               it=false; 
+               break; 
             }
 
         } while (it);
