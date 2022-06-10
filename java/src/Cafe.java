@@ -779,7 +779,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 1: System.out.print("Enter order ID: "); 
                String id = in.readLine(); 
                try{
-                  String query = String.format("SELECT "); 
+                  String query2 = String.format("SELECT "); 
                } catch (Exception e){
 
                }
