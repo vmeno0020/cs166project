@@ -426,14 +426,14 @@ public class Cafe {
         String query = "SELECT * FROM Menu"; 
         int status = esql.executeQueryAndPrintResult(query); 
         System.out.print("\n\n"); 
-     }catch(Exception e){
+     } catch(Exception e){
         System.err.println(e.getMessage()); 
      }
    return null; 
 
   }
 
-  public static void ChangeItem(Cafe esql) {
+public static void ChangeItem(Cafe esql) {
     try {
 	boolean changeMenuItem = true;
 	while(changeMenuItem) {
@@ -482,7 +482,9 @@ public class Cafe {
 			default: System.out.println("Invalid input"); break;
 		  }
 		}
-	 }
+	 }catch(Exception e){
+       System.err.println (e.getMessage ());
+    }
 }
 /*
   public static String loginbyManager(Cafe esql) {
@@ -577,12 +579,12 @@ public static void Menu(Cafe esql, String authorisedUser){
 			}
 		
 		
-	}catch(Exception e){
+	}			 
+		
+}catch(Exception e){
          System.err.println (e.getMessage ());
 	 return null;
-	}					 
-		
-}
+	}		
 }
 
 
