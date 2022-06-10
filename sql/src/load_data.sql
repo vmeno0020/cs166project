@@ -12,6 +12,6 @@ WITH DELIMITER ';';
 ALTER SEQUENCE orders_orderid_seq RESTART 87257;
 
 COPY ITEMSTATUS
-FROM '/extra/vmeno003/project/data/itemStatus.cs'
+FROM '/extra/vmeno003/project/data/itemStatus.csv'
 WITH DELIMITER ';';
 
