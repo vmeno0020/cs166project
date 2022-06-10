@@ -22,6 +22,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Iterator; 
 import java.util.ArrayList;
 
 /**
@@ -686,7 +687,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 
   }
 
-  public static Double getItemPrice(Cafe esql, string itName){
+  public static Double getItemPrice(Cafe esql, String itName){
       try{ 
       
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", itName); 
@@ -698,7 +699,7 @@ public static void Menu(Cafe esql, String authorisedUser){
     return 0.00; //edit
 
   }
-   public void executeQueries(Cafe sql, List<String>queries){
+   public void executeQueries(Cafe esql, List<String>queries){
          Iterator i = queries.iterator(); 
          while (i.hasNext()){
             String q = i.next(); 
@@ -717,7 +718,7 @@ public static void Menu(Cafe esql, String authorisedUser){
           boolean it = true;
           boolean paid = false;  
           int orderid = getNextOrderID(esql); 
-          Double price = 0; 
+          Double price = 0.0; 
           List<String> queries = new ArrayList<String>(); 
           
         do{
@@ -735,7 +736,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                 System.out.print("\n Enter comments: "); 
                 String comment = in.readLine(); 
                 String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, comments) VALUES ('%s', '%s', '%s')", orderid, name, comment); 
-                list.add(query2); 
+                queries.add(query2); 
               }catch(Exception e){
                  System.err.println("Invalid item!\n"); 
               }
@@ -746,7 +747,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 3: 
                String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
                esql.executeQuery(query); 
-               esql.executeQueries(queries); 
+               esql.executeQueries(esql, queries); 
                it=false; 
                break; 
                case 9: it=false; break; 
