@@ -281,7 +281,7 @@ public class Cafe {
                    case 1: Menu(esql, authorisedUser); break;
                    case 2: UpdateProfile(esql); break;
                    case 3: PlaceOrder(esql, authorisedUser); break;
-                   case 4: UpdateOrder(esql); break;
+                   case 4: UpdateOrder(esql, authorisedUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -717,7 +717,7 @@ public static void Menu(Cafe esql, String authorisedUser){
           boolean paid = false;  
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
-          String status = "Order recieved"; 
+          String stat = "Order recieved"; 
           List<String> queries = new ArrayList<String>(); 
           
         do{
