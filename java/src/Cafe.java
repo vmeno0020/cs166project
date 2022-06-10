@@ -681,7 +681,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                   case 2: paid = false; System.out.println("Paid later.\n"); break; 
                   default: System.out.println("Unrecognized choice!\n"); break; 
                }
-            }
+            }while(paid != null); 
 
 
             String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
