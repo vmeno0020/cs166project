@@ -785,7 +785,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                }
             }
 
-         } while (it)
+         } while (it); 
       } catch (Exception e){
          System.err.println(e.getMessage()); 
       }
