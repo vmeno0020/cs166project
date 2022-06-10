@@ -376,35 +376,182 @@ public class Cafe {
 
 // Rest of the functions definition go in here
 
+  public static void menuItemSearch(Cafe esql) {
+    try {
+	boolean menuSearch = true;
+
+	while(menuSearch) {
+		System.out.println("1. Item Name to search: ");
+		System.out.println("2. Item Type to search: ");
+		System.out.println("9. Go back.");
+		
+		switch(readChoice()) {
+		case 1: ItemNameSearch(esql); break;
+		case 2: ItemTypeSearch(esql); break;
+		case 9: menuSearch = false; break;
+		default: System.out.println("Invalid Input"); break;
+		}
+	   }
+	}catch(Exception e) {
+	   System.err.println (e.getMessage ());
+	}
+}
+
+  public static void ItemNameSearch(Cafe esql) {
+    try {
+	System.out.println("Name of Item: ");
+	String itemName = in.readLine();
+	String nameQuery = String.format("SELECT * FROM MENU WHERE itemName = '%s'", itemName);
+	esql.executeQueryAndPrintResult(nameQuery);
+	}catch(Exception e){
+		System.err.println(e.getMessage ());
+	    }
+}
+
+  public static void ItemTypeSearch(Cafe esql) {
+    try{
+	System.out.println("Name of Type: ");        
+        String itemType = in.readLine();
+        String typeQuery = String.format("SELECT * FROM MENU WHERE type = '%s'", itemType);
+        esql.executeQueryAndPrintResult(typeQuery);
+        }catch(Exception e){
+                System.err.println(e.getMessage ());
+		return null;
+            }
+}        	     
+
+  public static void ChangeItem(Cafe esql) {
+    try {
+	boolean changeMenuItem = true;
+	while(changeMenuItem) {
+		System.out.print("Type the item name which you want to update.");
+		String itemName = in.readLine();
+		System.out.println("Choose what attribute of the item you want to update.");
+		System.out.println("1. Name");
+		System.out.println("2. Description");
+		System.out.println("3. Price");
+		System.out.println("4. Type");
+		System.out.println("5. Image URL");
+		System.out.println("9. Go back");
+
+		switch(readChoice()) {
+			case 1: System.out.print("\tType the updated item name.");
+			String itemName2 = in.readLine();
+			String updateNamequery = String.format("UPDATE MENU SET itemName = '%s' WHERE itemName = '%s'", itemName2, itemName);
+			esql.executeUpdate(updateNamequery);
+			break;
+
+			case 2: System.out.print("\tType the updated item description.");
+			String itemDesc2 = in.readLine();
+			String updateDescquery = String.format("UPDATE MENU SET description = '%s' WHERE itemName = '%s'", itemDesc2, itemName);
+			esql.executeUpdate(updateDescquery);
+			break;
+
+			case 3: System.out.print("\tType the updated item price.");
+                        String itemPrice2 = in.readLine();
+                        String updatePricequery = String.format("UPDATE MENU SET price = '%s' WHERE itemName = '%s'", itemPrice2, itemName);
+                        esql.executeUpdate(updatePricequery);
+			break;
+
+			case 4: System.out.print("\tType the updated item type.");
+                        String itemType2 = in.readLine();
+                        String updateTypequery = String.format("UPDATE MENU SET type = '%s' WHERE itemName = '%s'", itemType2, itemName);
+                        esql.executeUpdate(updateTypequery);
+			break;
+
+			case 5: System.out.print("\tType the updated Image URL of the item.");
+                        String itemURL2 = in.readLine();
+                        String updateURLquery = String.format("UPDATE MENU SET imageURL = '%s' WHERE itemName = '%s'", itemURL2, itemName);
+                        esql.executeUpdate(updateURLquery);
+			break;
+
+			case 9: changeMenuItem = false; break;
+			default: System.out.println("Invalid input"); break;
+		  }
+		}
+	 }
+}
+/*
+  public static String loginbyManager(Cafe esql) {
+   try {
+	System.out.println("\tLogin: ");
+	String userlogin = in.readLine();
+	System.out.print("\tPassword: ");
+	String userPassword = in.readLine();
+	String Managerquery = String.format("SELECT * FROM USERS WHERE login = '%s' AND password = '%s' AND type = 'Manager'", userlogin, userPassword);
+	int loginVal = esql.executeQuery(Managerquery);
+	if(loginVal > 0) {
+		return userlogin;
+		System.out.println("This user is not a manager.");
+		return null;
+	 }catch(Exception e){
+		System.err.println (e.getMessage());
+		return null;
+	}
+}
+}
+*/
+public static void PrintFullMenu(Cafe esql){
+     try{
+        System.out.print("========\n FULL MENU \n======"); 
+        String query = "SELECT * FROM MENU"; 
+        int status = esql.executeQueryAndPrintResult(query); 
+        System.out.print("\n\n"); 
+     }catch(Exception e){
+        System.err.println(e.getMessage()); 
+     }
+
+
+  }
+		
   public static void Menu(Cafe esql){
     try {
+	PrintFullMenu(esql);
+
+	String userType = null;
+ 	  String query = String.format("SELECT type FROM Users WHERE login='%s'", user);
+ 	  List<List<String>> result = esql.executeQueryAndReturnResult(query);
+ 	  userType = result.get(0).get(0);
+
 	boolean menu1 = true;
 
+
 	while(menu1) {
-		String mUser = null;
-		System.out.println("Cafe Menu:");
-		System.out.println("1. View Items");
-		System.out.println("2. Change Items");
+	    if(userType.equals("Customer")) {
+		//System.out.println("Cafe Menu:");
+		System.out.println("1. View Full Menu ");
+		System.out.println("2. Item Search");
+		System.out.println("3. Item Type");
+		//System.out.println("2. Change Items");
 		System.out.println("------------------");
-		System.out.println("9. Exit");
+		System.out.println("9. Go Back");
+	
 		switch (readChoice()) {
 		 // calling functions
-		 case 1: menuItem(eql); break;
-		 case 2: mUser = MLogin(esql); break;
+		 case 1: PrintFullMenu(esql); break;
+		 case 2: menuItemSearch(eql); break;
+		 case 3: menuTypeSearch(esql); break;
+		 //case 2: mUser = loginbyManager(esql); break;
 		 case 9: menu1 = false; break;
 		 default: System.out.println("Unrecognized choice!"); break;
 		}
-
-		if (mUser != null) {
-			boolean changeMenu = true;
-			while (changeMenu) {
-				System.out.println("1. Add Items");
-				System.out.println("2. Delete Items");
-				System.out.println("3. Update Items");
+	 }
+		if (userType.equals("Manager")) {
+		//	boolean changeMenu = true;
+		//	while (changeMenu) {
+				System.out.println("1. View Items");
+				System.out.println("2. Search for item name");
+				System.out.println("3. Search for item type");
+				System.out.println("4. Add Items");
+				System.out.println("5. Delete Items");
+				System.out.println("6. Update Items");
 				System.out.println("9. Exit");
 				
 			switch(readChoice()) {
-				case 1: System.out.print("\tAdd the name of the item.");
+				case 1: PrintFullMenu(esql); break;
+                 		case 2: menuItemSearch(eql); break;
+                 		case 3: menuTypeSearch(esql); break;
+				case 4: System.out.print("\tAdd the name of the item.");
 					String itemName = in.readLine();
 					System.out.print("\tAdd the description of the item.");
 					String itemDesc = in.readLine();
@@ -416,14 +563,28 @@ public class Cafe {
 					String itemURL = in.readLine();
 					String itemQuery = String.format("INSERT INTO MENU (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", itemName, itemDesc, itemPrice, itemType, itemURL);
 					esql.executeUpdate(itemQuery);
-					System.out.println("The item has been added.);
+					System.out.println("The item has been added.");
 				break;
-				case 2: System.out.print(
-				
-					 
+				case 5: System.out.print("Type the item name which you want to delete.");
+					String itemName = in.readLine();
+					String deleteQuery = String.format("DELETE FROM Menu WHERE itemName='%s'", itemName);
+					esql.executeUpdate(deleteQuery);
+				break;
+				case 6: ChangeItem(esql); break;
+				case 9: changeMenu = false; break;
+				default: System.out.println("Invalid input"); break;
+				}
+			}
+		
+		
+	}catch(Exception e){
+         System.err.println (e.getMessage ());
+	 return null;
+	}					 
 		
 }
-
+}
+ 
   public static void UpdateProfile(Cafe esql){
      try{
 	System.out.print("\tEnter user login again: ");
