@@ -400,8 +400,8 @@ public class Cafe {
   public static void ItemNameSearch(Cafe esql) {
     try {
 	System.out.println("Name of Item: ");
-	String itemName = in.readLine();
-	String nameQuery = String.format("SELECT * FROM Menu WHERE itemName = '%s'", itemName);
+	String itemname = in.readLine();
+	String nameQuery = String.format("SELECT * FROM Menu WHERE itemName = '%s'", itemname);
 	esql.executeQueryAndPrintResult(nameQuery);
 	}catch(Exception e){
 		System.err.println(e.getMessage ());
@@ -438,7 +438,7 @@ public static void ChangeItem(Cafe esql) {
 	boolean changeMenuItem = true;
 	while(changeMenuItem) {
 		System.out.print("Type the item name which you want to update.");
-		String itemName = in.readLine();
+		String name = in.readLine();
 		System.out.println("Choose what attribute of the item you want to update.");
 		System.out.println("1. Name");
 		System.out.println("2. Description");
@@ -450,31 +450,31 @@ public static void ChangeItem(Cafe esql) {
 		switch(readChoice()) {
 			case 1: System.out.print("\tType the updated item name.");
 			String itemName2 = in.readLine();
-			String updateNamequery = String.format("UPDATE MENU SET itemName = '%s' WHERE itemName = '%s'", itemName2, itemName);
+			String updateNamequery = String.format("UPDATE MENU SET itemName = '%s' WHERE itemName = '%s'", itemName2, name);
 			esql.executeUpdate(updateNamequery);
 			break;
 
 			case 2: System.out.print("\tType the updated item description.");
 			String itemDesc2 = in.readLine();
-			String updateDescquery = String.format("UPDATE MENU SET description = '%s' WHERE itemName = '%s'", itemDesc2, itemName);
+			String updateDescquery = String.format("UPDATE MENU SET description = '%s' WHERE itemName = '%s'", itemDesc2, name);
 			esql.executeUpdate(updateDescquery);
 			break;
 
 			case 3: System.out.print("\tType the updated item price.");
                         String itemPrice2 = in.readLine();
-                        String updatePricequery = String.format("UPDATE MENU SET price = '%s' WHERE itemName = '%s'", itemPrice2, itemName);
+                        String updatePricequery = String.format("UPDATE MENU SET price = '%s' WHERE itemName = '%s'", itemPrice2, name);
                         esql.executeUpdate(updatePricequery);
 			break;
 
 			case 4: System.out.print("\tType the updated item type.");
                         String itemType2 = in.readLine();
-                        String updateTypequery = String.format("UPDATE MENU SET type = '%s' WHERE itemName = '%s'", itemType2, itemName);
+                        String updateTypequery = String.format("UPDATE MENU SET type = '%s' WHERE itemName = '%s'", itemType2, name);
                         esql.executeUpdate(updateTypequery);
 			break;
 
 			case 5: System.out.print("\tType the updated Image URL of the item.");
                         String itemURL2 = in.readLine();
-                        String updateURLquery = String.format("UPDATE MENU SET imageURL = '%s' WHERE itemName = '%s'", itemURL2, itemName);
+                        String updateURLquery = String.format("UPDATE MENU SET imageURL = '%s' WHERE itemName = '%s'", itemURL2, name);
                         esql.executeUpdate(updateURLquery);
 			break;
 
@@ -538,7 +538,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 		}
 	 }
 		if (userType.equals("Manager")) {
-		//	boolean changeMenu = true;
+		//	boolean changeMenu = true; //EDIT HERE
 		//	while (changeMenu) {
 				System.out.println("1. View Items");
 				System.out.println("2. Search for item name");
@@ -552,7 +552,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                  		case 2: menuItemSearch(esql); break;
                  		
 				case 4: System.out.print("\tAdd the name of the item.");
-					String itemName = in.readLine();
+					String name = in.readLine();
 					System.out.print("\tAdd the description of the item.");
 					String itemDesc = in.readLine();
 					System.out.print("\tAdd the price of the item.");
@@ -561,18 +561,18 @@ public static void Menu(Cafe esql, String authorisedUser){
 					String itemType = in.readLine();
 					System.out.print("\t Add the image URL of the item.");
 					String itemURL = in.readLine();
-					String itemQuery = String.format("INSERT INTO Menu (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", itemName, itemDesc, itemPrice, itemType, itemURL);
+					String itemQuery = String.format("INSERT INTO Menu (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", name, itemDesc, itemPrice, itemType, itemURL);
 					esql.executeUpdate(itemQuery);
 					System.out.println("The item has been added.");
 				break;
 				case 5: System.out.print("Type the item name which you want to delete.");
-					String itemName = in.readLine();
-					String deleteQuery = String.format("DELETE FROM Menu WHERE itemName='%s'", itemName);
+					String name = in.readLine();
+					String deleteQuery = String.format("DELETE FROM Menu WHERE itemName='%s'", name);
 					esql.executeUpdate(deleteQuery);
 				break;
 				case 6: ChangeItem(esql); break;
-				case 9: changeMenu = false; break;
-				default: System.out.println("Invalid input"); break;
+				case 9: break;
+				default: System.out.println("Invalid input\n"); break;
 				}
 			}
 		
@@ -663,14 +663,40 @@ public static void Menu(Cafe esql, String authorisedUser){
       }
    }//end
 		
+  
+  public static int getNextOrderID(Cafe esql){
+     String query = "SELECT MAX(orderid) FROM Orders"; 
+     List<List<String>> res = executeQueryAndReturnResult(query); 
+     String currId = res.get(0).get(0); 
+     int nextId = Integer.parseInt(currId)+1;
+     return nextId; 
 
+  }
 
-  public static void PlaceOrder(Cafe esql, String authorisedUser){
+  public static float getItemPrice(Cafe esql){
+     do { 
+      try{ 
+         System.out.print("\nEnter item name: "); 
+         String name = in.readLine(); 
+         String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
+         List<List<String>> res = esql.executeQueryAndReturnResult(query); 
+         break; 
+      }catch(Exception e){
+         System.err.println(e.getMessage () ); 
+         continue; 
+      }
+
+    }while(true); 
+    Float price = Float.parseFloat(res.get(0).get(0)); 
+    return price; 
+
+  }
+   public static void PlaceOrder(Cafe esql, String authorisedUser){
       try{
          PrintFullMenu(esql); 
          //boolean order = true; //come back to later 
             float price = getItemPrice(esql); 
-            boolean paid = null; 
+            boolean paid = false; 
             int orderid = getNextOrderID(esql);
             do{
                System.out.println("Would you like to pay now or later?\n1. Now\n2. Later\n"); 
@@ -679,7 +705,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                   case 2: paid = false; System.out.println("Paid later.\n"); break; 
                   default: System.out.println("Unrecognized choice!\n"); break; 
                }
-            }while(paid != null); 
+            }while(true); 
 
 
             String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
@@ -690,35 +716,8 @@ public static void Menu(Cafe esql, String authorisedUser){
             System.err.println(e.getMessage()); 
          }
    }
-  
-  public int getNextOrderID(Cafe esql){
-     String query = "SELECT MAX(orderid) FROM Orders"; 
-     List<List<String>> res = executeQueryAndReturnResult(query); 
-     String currId = res.get(0).get(0); 
-     int nextId = parseInt(currId)+1;
-     return nextId; 
 
-  }
-
-  public float getItemPrice(Cafe esql){
-     do { 
-      try{ 
-         System.out.print("\nEnter item name: "); 
-         String itemNm = in.readLine(); 
-         String itemname = String.format("SELECT price FROM Menu WHERE itemName='%s'", itemNm); 
-         List<List<String>> res = esql.executeQueryAndReturnResult(query); 
-         break; 
-      }catch(Exception e){
-         System.err.println(e.getMessage () ); 
-         continue; 
-      }
-
-    }while(true); 
-    Float price = Float.parseFloat(price.get(0).get(0)); 
-    return price; 
-
-  }
-
+   public static void PlaceOrder(Cafe esql){}
 
 }//end Cafe
 
