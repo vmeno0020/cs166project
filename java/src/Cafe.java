@@ -695,7 +695,7 @@ public static void Menu(Cafe esql, String authorisedUser){
   
   public int getNextOrderID(Cafe esql){
      String query = "SELECT MAX(orderid) FROM Orders"; 
-     <List<List<String>> res = executeQueryAndReturnResult(query); 
+     List<List<String>> res = executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
      int nextId = parseInt(currId)+1;
      return nextId; 
@@ -708,7 +708,7 @@ public static void Menu(Cafe esql, String authorisedUser){
          System.out.print("\nEnter item name: "); 
          String itemNm = in.readLine(); 
          String itemname = String.format("SELECT price FROM Menu WHERE itemName='%s'", itemNm); 
-         <List<List<String>>> res = esql.executeQueryAndReturnResult(query); 
+         List<List<String>> res = esql.executeQueryAndReturnResult(query); 
          break; 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
