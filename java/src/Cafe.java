@@ -699,16 +699,7 @@ public static void Menu(Cafe esql, String authorisedUser){
     return 0.00; //edit
 
   }
-   public void executeQueries(Cafe esql, List<String>queries){
-         for (String i : queries) {
-            try{
-               esql.executeQuery(i); 
-            }catch(Exception e) {
-               System.err.println(e.getMessage()); 
-            }
-         }
 
-   }
 
    public static void PlaceOrder(Cafe esql, String authorisedUser){
        
@@ -727,7 +718,7 @@ public static void Menu(Cafe esql, String authorisedUser){
             System.out.println("\n3. Place order\n"); 
             System.out.println("\n9. Cancel Order\n");  
             System.out.println("\n===============================\n");
-            System.out.println("\nSelect a choice: "); 
+            //System.out.println("\nSelect a choice: "); 
             switch (readChoice()){
                case 1: 
               try{ 
@@ -748,7 +739,14 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 3: 
                String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
                esql.executeQuery(query); 
-               esql.executeQueries(esql, queries); 
+                  for (String i : queries) {
+               try{
+                  esql.executeQuery(i); 
+               }catch(Exception e) {
+                  System.err.println(e.getMessage()); 
+               }
+         }
+
                it=false; 
                break; 
                case 9: it=false; break; 
