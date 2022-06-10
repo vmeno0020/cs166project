@@ -752,16 +752,13 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 9: it=false; break; 
             }
 
+        } while (it);
 
 
 
-        }catch(Exception e){
+   }catch(Exception e){
             System.err.println(e.getMessage()); 
         }
-
-
-
-}
    }
    public static void UpdateOrder(Cafe esql){}
 
