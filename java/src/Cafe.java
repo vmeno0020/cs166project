@@ -281,7 +281,7 @@ public class Cafe {
                    case 1: Menu(esql, authorisedUser); break;
                    case 2: UpdateProfile(esql); break;
                    case 3: PlaceOrder(esql, authorisedUser); break;
-                   case 4: UpdateOrder(esql); break;
+                   case 4: UpdateOrder(esql, authorisedUser); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
                 }
@@ -717,19 +717,21 @@ public static void Menu(Cafe esql, String authorisedUser){
           boolean paid = false;  
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
-          String status = "Order recieved"; 
+          String stat = "Order recieved"; 
           List<String> queries = new ArrayList<String>(); 
           
         do{
-            System.out.print("1. Add item");      
-            System.out.print("2. View Total");
-            System.out.print("3. Place order"); 
-            System.out.print("9. Cancel Order");  
-            System.out.print("Select a choice:"); 
+            System.out.println("\n========= PLACE ORDER =========\n");
+            System.out.println("\n1. Add item\n");      
+            System.out.println("\n2. View Total\n");
+            System.out.println("\n3. Place order\n"); 
+            System.out.println("\n9. Cancel Order\n");  
+            System.out.println("\n===============================\n");
+            System.out.println("\nSelect a choice: "); 
             switch (readChoice()){
                case 1: 
               try{ 
-                 System.out.print("Enter item name: "); 
+                 System.out.print("\nEnter item name: "); 
                 String name = in.readLine(); 
                 price += getItemPrice(esql, name); 
                 System.out.print("\n Enter comments: "); 
@@ -737,7 +739,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                 String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%s', '%s', '%s', '%s')", orderid, name, stat, comment); 
                 queries.add(query2); 
               }catch(Exception e){
-                 System.err.println("Invalid item!\n"); 
+                 System.err.println("\nInvalid item!\n"); 
               }
               break; 
  
@@ -779,13 +781,13 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 1: System.out.print("Enter order ID: "); 
                String id = in.readLine(); 
                try{
-                  String query = String.format("SELECT "); 
+                  String query2 = String.format("SELECT "); 
                } catch (Exception e){
 
                }
             }
 
-         } while (it)
+         } while (it); 
       } catch (Exception e){
          System.err.println(e.getMessage()); 
       }
