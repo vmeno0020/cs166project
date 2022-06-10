@@ -267,7 +267,7 @@ public class Cafe {
               while(usermenu) {
                 System.out.println("MAIN MENU");
                 System.out.println("---------");
-                System.out.println("1. Goto Menu");
+                System.out.println("1. View Food Menu");
                 System.out.println("2. Update Profile");
                 System.out.println("3. Place a Order");
                 System.out.println("4. Update a Order");
@@ -418,7 +418,20 @@ public class Cafe {
                 System.err.println(e.getMessage ());
 		return null;
             }
-}        	     
+}
+
+ public static void PrintFullMenu(Cafe esql){
+     try{
+        System.out.print("========\n FULL MENU \n======"); 
+        String query = "SELECT * FROM MENU"; 
+        int status = esql.executeQueryAndPrintResult(query); 
+        System.out.print("\n\n"); 
+     }catch(Exception e){
+        System.err.println(e.getMessage()); 
+     }
+
+
+  }
 
   public static void ChangeItem(Cafe esql) {
     try {
@@ -491,20 +504,8 @@ public class Cafe {
 }
 }
 */
-public static void PrintFullMenu(Cafe esql){
-     try{
-        System.out.print("========\n FULL MENU \n======"); 
-        String query = "SELECT * FROM MENU"; 
-        int status = esql.executeQueryAndPrintResult(query); 
-        System.out.print("\n\n"); 
-     }catch(Exception e){
-        System.err.println(e.getMessage()); 
-     }
-
-
-  }
 		
-  public static void Menu(Cafe esql){
+public static void Menu(Cafe esql){
     try {
 	PrintFullMenu(esql);
 
@@ -584,6 +585,8 @@ public static void PrintFullMenu(Cafe esql){
 		
 }
 }
+
+
  
   public static void UpdateProfile(Cafe esql){
      try{
@@ -661,18 +664,7 @@ public static void PrintFullMenu(Cafe esql){
       }
    }//end
 		
- public static void PrintFullMenu(Cafe esql){
-     try{
-        System.out.print("========\n FULL MENU \n======"); 
-        String query = "SELECT * FROM MENU"; 
-        int status = esql.executeQueryAndPrintResult(query); 
-        System.out.print("\n\n"); 
-     }catch(Exception e){
-        System.err.println(e.getMessage()); 
-     }
 
-
-  }
 
   public static void PlaceOrder(Cafe esql, string authorisedUser){
       try{
