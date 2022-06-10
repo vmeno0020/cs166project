@@ -274,7 +274,7 @@ public class Cafe {
                 System.out.println(".........................");
                 System.out.println("9. Log out");
                 switch (readChoice()){
-                   case 1: Menu(esql); break;
+                   case 1: Menu(esql, authorisedUser); break;
                    case 2: UpdateProfile(esql); break;
                    case 3: PlaceOrder(esql); break;
                    case 4: UpdateOrder(esql); break;
@@ -401,7 +401,7 @@ public class Cafe {
     try {
 	System.out.println("Name of Item: ");
 	String itemName = in.readLine();
-	String nameQuery = String.format("SELECT * FROM MENU WHERE itemName = '%s'", itemName);
+	String nameQuery = String.format("SELECT * FROM Menu WHERE itemName = '%s'", itemName);
 	esql.executeQueryAndPrintResult(nameQuery);
 	}catch(Exception e){
 		System.err.println(e.getMessage ());
@@ -412,7 +412,7 @@ public class Cafe {
     try{
 	System.out.println("Name of Type: ");        
         String itemType = in.readLine();
-        String typeQuery = String.format("SELECT * FROM MENU WHERE type = '%s'", itemType);
+        String typeQuery = String.format("SELECT * FROM Menu WHERE type = '%s'", itemType);
         esql.executeQueryAndPrintResult(typeQuery);
         }catch(Exception e){
                 System.err.println(e.getMessage ());
@@ -423,13 +423,13 @@ public class Cafe {
  public static void PrintFullMenu(Cafe esql){
      try{
         System.out.print("========\n FULL MENU \n======"); 
-        String query = "SELECT * FROM MENU"; 
+        String query = "SELECT * FROM Menu"; 
         int status = esql.executeQueryAndPrintResult(query); 
         System.out.print("\n\n"); 
      }catch(Exception e){
         System.err.println(e.getMessage()); 
      }
-
+   return null; 
 
   }
 
@@ -505,15 +505,14 @@ public class Cafe {
 }
 */
 		
-public static void Menu(Cafe esql){
+public static void Menu(Cafe esql, String authorisedUser){
     try {
 	PrintFullMenu(esql);
 
-	String userType = null;
- 	  String query = String.format("SELECT type FROM Users WHERE login='%s'", user);
+	  String userType = null;
+ 	  String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
  	  List<List<String>> result = esql.executeQueryAndReturnResult(query);
  	  userType = result.get(0).get(0);
-
 	boolean menu1 = true;
 
 
@@ -562,7 +561,7 @@ public static void Menu(Cafe esql){
 					String itemType = in.readLine();
 					System.out.print("\t Add the image URL of the item.");
 					String itemURL = in.readLine();
-					String itemQuery = String.format("INSERT INTO MENU (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", itemName, itemDesc, itemPrice, itemType, itemURL);
+					String itemQuery = String.format("INSERT INTO Menu (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", itemName, itemDesc, itemPrice, itemType, itemURL);
 					esql.executeUpdate(itemQuery);
 					System.out.println("The item has been added.");
 				break;

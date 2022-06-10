@@ -23,7 +23,7 @@ CREATE TABLE Orders(
 	orderid serial UNIQUE NOT NULL,
 	login char(50), 
 	paid boolean,
-	timeStampRecieved timestamp NOT NULL,
+	timeStampRecieved timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	total real NOT NULL,
 	PRIMARY KEY(orderid));
 
