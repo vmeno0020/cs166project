@@ -681,7 +681,7 @@ public static void Menu(Cafe esql, String authorisedUser){
    }catch(Exception e){
        System.err.println(e.getMessage () ); 
    }
-
+   return 0; //edit 
 
   }
 
@@ -696,7 +696,7 @@ public static void Menu(Cafe esql, String authorisedUser){
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
       }
-    
+    return 0.00; //edit
 
   }
    public static void PlaceOrder(Cafe esql, String authorisedUser){
