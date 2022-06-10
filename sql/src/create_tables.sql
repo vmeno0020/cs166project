@@ -30,7 +30,7 @@ CREATE TABLE Orders(
 CREATE TABLE ItemStatus(
 	orderid integer,
 	itemName char(50), 
-	lastUpdated timestamp NOT NULL,
+	lastUpdated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, 
 	status char(20), 
 	comments char(130), 
 	PRIMARY KEY(orderid,itemName),
