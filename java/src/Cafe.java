@@ -276,7 +276,7 @@ public class Cafe {
                 switch (readChoice()){
                    case 1: Menu(esql, authorisedUser); break;
                    case 2: UpdateProfile(esql); break;
-                   case 3: PlaceOrder(esql); break;
+                   case 3: PlaceOrder(esql, authorisedUser); break;
                    case 4: UpdateOrder(esql); break;
                    case 9: usermenu = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
@@ -416,8 +416,8 @@ public class Cafe {
         esql.executeQueryAndPrintResult(typeQuery);
         }catch(Exception e){
                 System.err.println(e.getMessage ());
-		return null;
-            }
+         }
+         return; 
 }
 
  public static void PrintFullMenu(Cafe esql){
@@ -429,7 +429,7 @@ public class Cafe {
      } catch(Exception e){
         System.err.println(e.getMessage()); 
      }
-   return null; 
+   return; 
 
   }
 
@@ -523,7 +523,6 @@ public static void Menu(Cafe esql, String authorisedUser){
 		//System.out.println("Cafe Menu:");
 		System.out.println("1. View Full Menu ");
 		System.out.println("2. Item Search");
-		System.out.println("3. Item Type");
 		//System.out.println("2. Change Items");
 		System.out.println("------------------");
 		System.out.println("9. Go Back");
@@ -531,8 +530,8 @@ public static void Menu(Cafe esql, String authorisedUser){
 		switch (readChoice()) {
 		 // calling functions
 		 case 1: PrintFullMenu(esql); break;
-		 case 2: menuItemSearch(eql); break;
-		 case 3: menuTypeSearch(esql); break;
+		 case 2: menuItemSearch(esql); break;
+
 		 //case 2: mUser = loginbyManager(esql); break;
 		 case 9: menu1 = false; break;
 		 default: System.out.println("Unrecognized choice!"); break;
@@ -543,7 +542,6 @@ public static void Menu(Cafe esql, String authorisedUser){
 		//	while (changeMenu) {
 				System.out.println("1. View Items");
 				System.out.println("2. Search for item name");
-				System.out.println("3. Search for item type");
 				System.out.println("4. Add Items");
 				System.out.println("5. Delete Items");
 				System.out.println("6. Update Items");
@@ -551,8 +549,8 @@ public static void Menu(Cafe esql, String authorisedUser){
 				
 			switch(readChoice()) {
 				case 1: PrintFullMenu(esql); break;
-                 		case 2: menuItemSearch(eql); break;
-                 		case 3: menuTypeSearch(esql); break;
+                 		case 2: menuItemSearch(esql); break;
+                 		
 				case 4: System.out.print("\tAdd the name of the item.");
 					String itemName = in.readLine();
 					System.out.print("\tAdd the description of the item.");
@@ -667,7 +665,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 		
 
 
-  public static void PlaceOrder(Cafe esql, string authorisedUser){
+  public static void PlaceOrder(Cafe esql, String authorisedUser){
       try{
          PrintFullMenu(esql); 
          //boolean order = true; //come back to later 
