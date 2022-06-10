@@ -686,13 +686,12 @@ public static void Menu(Cafe esql, String authorisedUser){
   }
 
   public static Double getItemPrice(Cafe esql){
-      try{  
+      try{ 
          System.out.print("\nEnter item name: "); 
          String name = in.readLine(); 
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
          List<List<String>> res = esql.executeQueryAndReturnResult(query); 
-         Double price = Double.parseDouble(res.get(0).get(0)); 
-         return price; 
+         return Double.parseDouble(res.get(0).get(0)); 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
       }
