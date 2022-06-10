@@ -700,11 +700,9 @@ public static void Menu(Cafe esql, String authorisedUser){
 
   }
    public void executeQueries(Cafe esql, List<String>queries){
-         Iterator i = queries.iterator(); 
-         while (i.hasNext()){
-            String q = i.next(); 
+         for (String i : queries) {
             try{
-               esql.executeQuery(q); 
+               esql.executeQuery(i); 
             }catch(Exception e) {
                System.err.println(e.getMessage()); 
             }
@@ -719,6 +717,7 @@ public static void Menu(Cafe esql, String authorisedUser){
           boolean paid = false;  
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
+          String status = "Order recieved"; 
           List<String> queries = new ArrayList<String>(); 
           
         do{
@@ -735,7 +734,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                 price += getItemPrice(esql, name); 
                 System.out.print("\n Enter comments: "); 
                 String comment = in.readLine(); 
-                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, comments) VALUES ('%s', '%s', '%s')", orderid, name, comment); 
+                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%s', '%s', '%s', '%s')", orderid, name, stat, comment); 
                 queries.add(query2); 
               }catch(Exception e){
                  System.err.println("Invalid item!\n"); 
@@ -761,7 +760,40 @@ public static void Menu(Cafe esql, String authorisedUser){
             System.err.println(e.getMessage()); 
         }
    }
-   public static void UpdateOrder(Cafe esql){}
+   public static void UpdateOrder(Cafe esql, String authorisedUser){
+      try{
+         boolean it = true; 
+         String userType = null;
+ 	      String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
+ 	      List<List<String>> result = esql.executeQueryAndReturnResult(query);
+ 	      userType = result.get(0).get(0);
+         do {
+            System.out.print("======== UPDATE ORDER =========");
+            System.out.print("1. View Order by id");
+            System.out.print("2. View all your orders"); 
+            System.out.print("3. Add item"); 
+            System.out.print("4. Delete item"); 
+            System.out.print("5. Edit item"); 
+            System.out.print("9. Go back");  
+            switch(readChoice()){
+               case 1: System.out.print("Enter order ID: "); 
+               String id = in.readLine(); 
+               try{
+                  String query = String.format("SELECT "); 
+               } catch (Exception e){
+
+               }
+            }
+
+         } while (it)
+      } catch (Exception e){
+         System.err.println(e.getMessage()); 
+      }
+
+
+
+
+   }
 
 }//end Cafe
 
