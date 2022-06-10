@@ -687,7 +687,7 @@ public static void Menu(Cafe esql, String authorisedUser){
          String name = in.readLine(); 
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
          List<List<String>> res = esql.executeQueryAndReturnResult(query); 
-         Double price = Float.parseFloat(res.get(0).get(0)); 
+         Double price = Double.parseDouble(res.get(0).get(0)); 
          return price; 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
