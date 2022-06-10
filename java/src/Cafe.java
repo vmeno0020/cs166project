@@ -512,6 +512,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 	PrintFullMenu(esql);
 
 	  String userType = null;
+     String name = ""; 
  	  String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
  	  List<List<String>> result = esql.executeQueryAndReturnResult(query);
  	  userType = result.get(0).get(0);
@@ -552,7 +553,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                  		case 2: menuItemSearch(esql); break;
                  		
 				case 4: System.out.print("\tAdd the name of the item.");
-					String name = in.readLine();
+					name = in.readLine();
 					System.out.print("\tAdd the description of the item.");
 					String itemDesc = in.readLine();
 					System.out.print("\tAdd the price of the item.");
@@ -566,7 +567,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 					System.out.println("The item has been added.");
 				break;
 				case 5: System.out.print("Type the item name which you want to delete.");
-					String name = in.readLine();
+					name = in.readLine();
 					String deleteQuery = String.format("DELETE FROM Menu WHERE itemName='%s'", name);
 					esql.executeUpdate(deleteQuery);
 				break;
@@ -664,7 +665,7 @@ public static void Menu(Cafe esql, String authorisedUser){
    }//end
 		
   
-  public static int getNextOrderID(Cafe esql){
+  public int getNextOrderID(Cafe esql){
      String query = "SELECT MAX(orderid) FROM Orders"; 
      List<List<String>> res = executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
@@ -673,7 +674,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 
   }
 
-  public static float getItemPrice(Cafe esql){
+  public float getItemPrice(Cafe esql){
      do { 
       try{ 
          System.out.print("\nEnter item name: "); 
@@ -717,7 +718,7 @@ public static void Menu(Cafe esql, String authorisedUser){
          }
    }
 
-   public static void PlaceOrder(Cafe esql){}
+   public static void UpdateOrder(Cafe esql){}
 
 }//end Cafe
 
