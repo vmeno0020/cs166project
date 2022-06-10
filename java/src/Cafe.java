@@ -30,12 +30,6 @@ import java.util.ArrayList;
  *
  */
 
-public class OrderHelpers{
-
-
-}
-
-
 
 
 public class Cafe {
@@ -679,23 +673,22 @@ public static void Menu(Cafe esql, String authorisedUser){
   
   public static int getNextOrderID(Cafe esql){
      String query = "SELECT MAX(orderid) FROM Orders"; 
-     List<List<String>> res = executeQueryAndReturnResult(query); 
+     List<List<String>> res = esql.executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
      int nextId = Integer.parseInt(currId)+1;
      return nextId; 
 
   }
 
-  public static float getItemPrice(Cafe esql){
-     do { 
-        Float price = 0.00; 
+  public static Double getItemPrice(Cafe esql){
+     do {
       try{ 
          System.out.print("\nEnter item name: "); 
          String name = in.readLine(); 
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
          List<List<String>> res = esql.executeQueryAndReturnResult(query); 
-         price = Float.parseFloat(res.get(0).get(0)); 
-         break; 
+         Double price = Float.parseFloat(res.get(0).get(0)); 
+         return price; 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
          continue; 
@@ -703,14 +696,13 @@ public static void Menu(Cafe esql, String authorisedUser){
 
     }while(true); 
     
-    return price; 
 
   }
    public static void PlaceOrder(Cafe esql, String authorisedUser){
       try{
          PrintFullMenu(esql); 
          //boolean order = true; //come back to later 
-            Float price = getItemPrice(esql); 
+            Double price = getItemPrice(esql); 
             boolean paid = false; 
             int orderid = getNextOrderID(esql);
             do{
