@@ -29,6 +29,15 @@ import java.util.ArrayList;
  * work with PostgreSQL JDBC drivers.
  *
  */
+
+public class OrderHelpers{
+
+
+}
+
+
+
+
 public class Cafe {
 
    // reference to physical database connection.
@@ -582,7 +591,7 @@ public static void Menu(Cafe esql, String authorisedUser){
 		
 }catch(Exception e){
          System.err.println (e.getMessage ());
-	 return null;
+	 return;
 	}		
 }
 
@@ -650,9 +659,12 @@ public static void Menu(Cafe esql, String authorisedUser){
 			esql.executeUpdate(query6);
 			System.out.println("The user type has been updated.");
 		}
-			else
-			    System.out.println("Not a manager, cannot change user type");
-			    break;
+			else {
+            System.out.println("Not a manager, cannot change user type");
+			   break;
+
+         }
+
 		case 9: updateProf = false; break;
                    default : System.out.println("Unrecognized choice!"); break;
 		}
@@ -665,7 +677,7 @@ public static void Menu(Cafe esql, String authorisedUser){
    }//end
 		
   
-  public int getNextOrderID(Cafe esql){
+  public static int getNextOrderID(Cafe esql){
      String query = "SELECT MAX(orderid) FROM Orders"; 
      List<List<String>> res = executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
@@ -674,13 +686,15 @@ public static void Menu(Cafe esql, String authorisedUser){
 
   }
 
-  public float getItemPrice(Cafe esql){
+  public static float getItemPrice(Cafe esql){
      do { 
+        Float price = 0.00; 
       try{ 
          System.out.print("\nEnter item name: "); 
          String name = in.readLine(); 
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
          List<List<String>> res = esql.executeQueryAndReturnResult(query); 
+         price = Float.parseFloat(res.get(0).get(0)); 
          break; 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
@@ -688,7 +702,7 @@ public static void Menu(Cafe esql, String authorisedUser){
       }
 
     }while(true); 
-    Float price = Float.parseFloat(res.get(0).get(0)); 
+    
     return price; 
 
   }
@@ -696,7 +710,7 @@ public static void Menu(Cafe esql, String authorisedUser){
       try{
          PrintFullMenu(esql); 
          //boolean order = true; //come back to later 
-            float price = getItemPrice(esql); 
+            Float price = getItemPrice(esql); 
             boolean paid = false; 
             int orderid = getNextOrderID(esql);
             do{
