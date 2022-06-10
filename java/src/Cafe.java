@@ -407,7 +407,18 @@ public class Cafe {
 				case 1: System.out.print("\tAdd the name of the item.");
 					String itemName = in.readLine();
 					System.out.print("\tAdd the description of the item.");
-					String itemDesc
+					String itemDesc = in.readLine();
+					System.out.print("\tAdd the price of the item.");
+					String itemPrice = in.readLine();
+					System.out.print("\tAdd the type of the item.");
+					String itemType = in.readLine();
+					System.out.print("\t Add the image URL of the item.");
+					String itemURL = in.readLine();
+					String itemQuery = String.format("INSERT INTO MENU (itemName, description, price, type, imageURL) VALUES ('%s', '%s', '%s', '%s', '%s')", itemName, itemDesc, itemPrice, itemType, itemURL);
+					esql.executeUpdate(itemQuery);
+					System.out.println("The item has been added.);
+				break;
+				case 2: System.out.print(
 				
 					 
 		
