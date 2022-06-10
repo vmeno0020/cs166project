@@ -661,9 +661,73 @@ public static void PrintFullMenu(Cafe esql){
       }
    }//end
 		
-  public static void PlaceOrder(Cafe esql){}
+ public static void PrintFullMenu(Cafe esql){
+     try{
+        System.out.print("========\n FULL MENU \n======"); 
+        String query = "SELECT * FROM MENU"; 
+        int status = esql.executeQueryAndPrintResult(query); 
+        System.out.print("\n\n"); 
+     }catch(Exception e){
+        System.err.println(e.getMessage()); 
+     }
 
-  public static void UpdateOrder(Cafe esql){}
+
+  }
+
+  public static void PlaceOrder(Cafe esql, string authorisedUser){
+      try{
+         PrintFullMenu(esql); 
+         //boolean order = true; //come back to later 
+            float price = getItemPrice(esql); 
+            boolean paid = null; 
+            int orderid = getNextOrderID(esql);
+            do{
+               System.out.println("Would you like to pay now or later?\n1. Now\n2. Later\n"); 
+               switch (readChoice()){
+                  case 1: paid = true; System.out.println("Paid now.\n"); break; 
+                  case 2: paid = false; System.out.println("Paid later.\n"); break; 
+                  default: System.out.println("Unrecognized choice!\n"); break; 
+               }
+            }
+
+
+            String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
+            esql.executeQueryAndPrintResult(query);
+
+
+      } catch(Exception e){
+            System.err.println(e.getMessage()); 
+         }
+   }
+  
+  public int getNextOrderID(Cafe esql){
+     String query = "SELECT MAX(orderid) FROM Orders"; 
+     <List<List<String>> res = executeQueryAndReturnResult(query); 
+     String currId = res.get(0).get(0); 
+     int nextId = parseInt(currId)+1;
+     return nextId; 
+
+  }
+
+  public float getItemPrice(Cafe esql){
+     do { 
+      try{ 
+         System.out.print("\nEnter item name: "); 
+         String itemNm = in.readLine(); 
+         String itemname = String.format("SELECT price FROM Menu WHERE itemName='%s'", itemNm); 
+         <List<List<String>>> res = esql.executeQueryAndReturnResult(query); 
+         break; 
+      }catch(Exception e){
+         System.err.println(e.getMessage () ); 
+         continue; 
+      }
+
+    }while(true); 
+    Float price = Float.parseFloat(price.get(0).get(0)); 
+    return price; 
+
+  }
+
 
 }//end Cafe
 
