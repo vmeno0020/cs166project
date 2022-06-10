@@ -673,10 +673,11 @@ public static void Menu(Cafe esql, String authorisedUser){
   
   public static int getNextOrderID(Cafe esql){
    try {
-      String query = "SELECT MAX(orderid) FROM Orders"; 
+      String query = "SELECT MAX(orderid) FROM Orders;"; 
      List<List<String>> res = esql.executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
      int nextId = Integer.parseInt(currId)+1;
+     
      return nextId; 
    }catch(Exception e){
        System.err.println(e.getMessage () ); 
@@ -685,11 +686,10 @@ public static void Menu(Cafe esql, String authorisedUser){
 
   }
 
-  public static Double getItemPrice(Cafe esql){
+  public static Double getItemPrice(Cafe esql, string itName){
       try{ 
-         System.out.print("\nEnter item name: "); 
-         String name = in.readLine(); 
-         String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
+      
+         String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", itName); 
          List<List<String>> res = esql.executeQueryAndReturnResult(query); 
          return Double.parseDouble(res.get(0).get(0)); 
       }catch(Exception e){
@@ -698,31 +698,71 @@ public static void Menu(Cafe esql, String authorisedUser){
     return 0.00; //edit
 
   }
-   public static void PlaceOrder(Cafe esql, String authorisedUser){
-      try{
-         PrintFullMenu(esql); 
-         //boolean order = true; //come back to later 
-            Double price = getItemPrice(esql); 
-            boolean paid = false; 
-            int orderid = getNextOrderID(esql);
-            do{
-               System.out.println("Would you like to pay now or later?\n1. Now\n2. Later\n"); 
-               switch (readChoice()){
-                  case 1: paid = true; System.out.println("Paid now.\n"); break; 
-                  case 2: paid = false; System.out.println("Paid later.\n"); break; 
-                  default: System.out.println("Unrecognized choice!\n"); break; 
-               }
-               
-               String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
-            esql.executeQueryAndPrintResult(query);
-            }while(true); 
-
-
-      }catch(Exception e){
-            System.err.println(e.getMessage()); 
+   public void executeQueries(Cafe sql, List<String>queries){
+         Iterator i = queries.iterator(); 
+         while (i.hasNext()){
+            String q = i.next(); 
+            try{
+               esql.executeQuery(q); 
+            }catch(Exception e) {
+               System.err.println(e.getMessage()); 
+            }
          }
+
    }
 
+   public static void PlaceOrder(Cafe esql, String authorisedUser){
+       
+       try{
+          boolean it = true;
+          boolean paid = false;  
+          int orderid = getNextOrderID(esql); 
+          Double price = 0; 
+          List<String> queries = new ArrayList<String>(); 
+          
+        do{
+            System.out.print("1. Add item");      
+            System.out.print("2. View Total");
+            System.out.print("3. Place order"); 
+            System.out.print("9. Cancel Order");  
+            System.out.print("Select a choice:"); 
+            switch (readChoice()){
+               case 1: 
+              try{ 
+                 System.out.print("Enter item name: "); 
+                String name = in.readLine(); 
+                price += getItemPrice(esql, name); 
+                System.out.print("\n Enter comments: "); 
+                String comment = in.readLine(); 
+                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, comments) VALUES ('%s', '%s', '%s')", orderid, name, comment); 
+                list.add(query2); 
+              }catch(Exception e){
+                 System.err.println("Invalid item!\n"); 
+              }
+              break; 
+ 
+               case 2: System.out.print(price); break; 
+
+               case 3: 
+               String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
+               esql.executeQuery(query); 
+               esql.executeQueries(queries); 
+               it=false; 
+               break; 
+               case 9: it=false; break; 
+            }
+
+
+
+
+        }catch(Exception e){
+            System.err.println(e.getMessage()); 
+        }
+
+
+
+}
+   }
    public static void UpdateOrder(Cafe esql){}
 
 }//end Cafe
