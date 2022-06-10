@@ -672,17 +672,21 @@ public static void Menu(Cafe esql, String authorisedUser){
 		
   
   public static int getNextOrderID(Cafe esql){
-     String query = "SELECT MAX(orderid) FROM Orders"; 
+   try {
+      String query = "SELECT MAX(orderid) FROM Orders"; 
      List<List<String>> res = esql.executeQueryAndReturnResult(query); 
      String currId = res.get(0).get(0); 
      int nextId = Integer.parseInt(currId)+1;
      return nextId; 
+   }catch(Exception e){
+       System.err.println(e.getMessage () ); 
+   }
+
 
   }
 
   public static Double getItemPrice(Cafe esql){
-     do {
-      try{ 
+      try{  
          System.out.print("\nEnter item name: "); 
          String name = in.readLine(); 
          String query = String.format("SELECT price FROM Menu WHERE itemName='%s'", name); 
@@ -691,10 +695,7 @@ public static void Menu(Cafe esql, String authorisedUser){
          return price; 
       }catch(Exception e){
          System.err.println(e.getMessage () ); 
-         continue; 
       }
-
-    }while(true); 
     
 
   }
@@ -712,14 +713,13 @@ public static void Menu(Cafe esql, String authorisedUser){
                   case 2: paid = false; System.out.println("Paid later.\n"); break; 
                   default: System.out.println("Unrecognized choice!\n"); break; 
                }
+               
+               String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
+            esql.executeQueryAndPrintResult(query);
             }while(true); 
 
 
-            String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
-            esql.executeQueryAndPrintResult(query);
-
-
-      } catch(Exception e){
+      }catch(Exception e){
             System.err.println(e.getMessage()); 
          }
    }
