@@ -729,7 +729,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                 String comment = in.readLine(); 
                 String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%d', '%s', '%s', '%s')", orderid, name, stat, comment); 
                 esql.executeQuery(query2); 
-                System.out.println("\n Item added!\n")
+                System.out.println("\n Item added!\n");
               }catch(Exception e){
                  System.err.println("\nInvalid item!\n"); 
               }
@@ -753,7 +753,8 @@ public static void Menu(Cafe esql, String authorisedUser){
                }
         
                case 9: 
-               String query  = String.format("DELETE * FROM ItemStatus WHERE orderid='%d'", orderid); 
+               String del  = String.format("DELETE * FROM ItemStatus WHERE orderid='%d'", orderid); 
+               esql.executeUpdate(del); 
                it=false; 
                break; 
             }
