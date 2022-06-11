@@ -709,13 +709,23 @@ public static void Menu(Cafe esql, String authorisedUser){
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
           String stat = "Order recieved"; 
+
+          String userType = null;
+ 	       String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
+ 	       List<List<String>> result = esql.executeQueryAndReturnResult(query);
+ 	       userType = result.get(0).get(0);
+          if (userType=="Employee" || userType=="Manager"){
+             boolean auth = true; 
+          }
+
           
         do{
             System.out.println("\n========= PLACE ORDER =========\n");
             System.out.println("\n1. Add item\n");      
             System.out.println("\n2. View Full Menu\n");
-            System.out.println("\n3. Place order\n"); 
-            System.out.println("\n4. Browse Order History"); 
+            System.out.println("\n3. Confirm order\n"); 
+            System.out.println("\n4. Browse Order History\n"); 
+            System.out.printin("\n5.[Managers/Employees] View Unpaid Orders\n"); 
             System.out.println("\n9. Cancel Order\n");  
             System.out.println("\n===============================\n");
             //System.out.println("\nSelect a choice: "); 
@@ -727,8 +737,8 @@ public static void Menu(Cafe esql, String authorisedUser){
                 price += getItemPrice(esql, name); 
                 System.out.print("\n Enter comments: "); 
                 String comment = in.readLine(); 
-                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%d', '%s', '%s', '%s')", orderid, name, stat, comment); 
-                esql.executeQuery(query2); 
+                String query2 = String.format("INSERT INTO ItemStatus (orderid, itemName, status, comments) VALUES ('%d', '%s', %s, '%s')", orderid, name, stat, comment); 
+                esql.executeUpdate(query2); 
                 System.out.println("\n Item added!\n");
               }catch(Exception e){
                  System.err.println("\nInvalid item!\n"); 
@@ -751,7 +761,16 @@ public static void Menu(Cafe esql, String authorisedUser){
                }catch(Exception e){
                    System.err.println(e.getMessage()); 
                }
-        
+               case 5: 
+                  try{
+                     if (auth){
+                        String unpaid = "SELECT * FROM Orders WHERE paid = 'false' AND timeStampRecieved > now() - interval '24 hours'"; 
+                        esql.executeQueryAndPrintResult(unpaid); 
+                     }
+                  }catch(Exception e){
+                     Systen.err.println(e.getMessage()); 
+                  }
+              
                case 9: 
                String del  = String.format("DELETE * FROM ItemStatus WHERE orderid='%d'", orderid); 
                esql.executeUpdate(del); 
@@ -770,27 +789,63 @@ public static void Menu(Cafe esql, String authorisedUser){
    public static void UpdateOrder(Cafe esql, String authorisedUser){
       try{
          boolean it = true; 
+         boolean auth = false; 
+         String pay = 'true'; 
          String userType = null;
  	      String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
  	      List<List<String>> result = esql.executeQueryAndReturnResult(query);
  	      userType = result.get(0).get(0);
+          if (userType=="Employee" || userType=="Manager"){
+             auth = true; 
+          }
+          System.out.print("\nEnter order id:\n"); 
+          String id = in.readLine(); 
+          String payquery = String.format("SELECT paid FROM Orders WHERE orderid='%d'", Integer.parseInt(id)); 
+          List<List<String>> result = esql.executeQueryAndReturnResult(query);
+ 	        pay = result.get(0).get(0);
+         
          do {
-            System.out.print("======== UPDATE ORDER =========");
-            System.out.print("1. View Order by id");
-            System.out.print("2. View all your orders"); 
-            System.out.print("3. Add item"); 
-            System.out.print("4. Delete item"); 
-            System.out.print("5. Edit item"); 
-            System.out.print("9. Go back");  
+            System.out.print("\n======== UPDATE ORDER =========\n");
+            System.out.print("\n1. Delete order\n");
+            System.out.print("\n2. View Order\n"); 
+            System.out.print("\n3. [Manager/Employee] Pay Order\n"); 
+            System.out.print("\n9. Go back\n");  
             switch(readChoice()){
-               case 1: System.out.print("Enter order ID: "); 
-               String id = in.readLine(); 
+               case 1: 
                try{
-                  String query2 = String.format("SELECT "); 
-               } catch (Exception e){
-
+               if (pay == 'false'){
+                     String del = String.format("DELETE * FROM Orders WHERE paid=false AND orderid='%d'", Integer.parseInt(id));
+                     esql.executeUpdate(del); 
                }
+               } catch(Exception e){
+                   System.err.println(e.getMessage()); 
+               }
+               break; 
+               case 2: 
+               try{
+                  String view = String.format("SELECT * FROM Orders WHERE orderid='%d'", Integer.parseInt(id)); 
+                  esql.executeQueryAndPrintResult(view); 
+               } catch(Exception e){
+                   System.err.println(e.getMessage()); 
+               }
+               break; 
+               case 3: 
+               try{
+                  if (auth){
+                     String paid = String.format("UPDATE Orders SET paid=true WHERE orderid='%d'", Integer.parseInt(id)); 
+                     esql.executeUpdate(paid); 
+
+                  }
+               }catch(Exception e){
+                   System.err.println(e.getMessage()); 
+               }
+               break; 
+               case 9: 
+               it=false; 
+               break; 
+               
             }
+
 
          } while (it); 
       } catch (Exception e){
