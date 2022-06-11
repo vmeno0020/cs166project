@@ -769,7 +769,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                         esql.executeQueryAndPrintResult(unpaid); 
                      }
                   }catch(Exception e){
-                     Systen.err.println(e.getMessage()); 
+                     System.err.println(e.getMessage()); 
                   }
               
                case 9: 
