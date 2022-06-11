@@ -708,14 +708,15 @@ public static void Menu(Cafe esql, String authorisedUser){
           boolean paid = false;  
           int orderid = getNextOrderID(esql); 
           Double price = 0.0; 
-          String stat = "Order recieved"; 
+          String stat = "Order recieved";
+          boolean auth = false;  
 
           String userType = null;
  	       String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
  	       List<List<String>> result = esql.executeQueryAndReturnResult(query);
  	       userType = result.get(0).get(0);
           if (userType=="Employee" || userType=="Manager"){
-             boolean auth = true; 
+              auth = true; 
           }
 
           
@@ -725,7 +726,7 @@ public static void Menu(Cafe esql, String authorisedUser){
             System.out.println("\n2. View Full Menu\n");
             System.out.println("\n3. Confirm order\n"); 
             System.out.println("\n4. Browse Order History\n"); 
-            System.out.printin("\n5.[Managers/Employees] View Unpaid Orders\n"); 
+            System.out.println("\n5.[Managers/Employees] View Unpaid Orders\n"); 
             System.out.println("\n9. Cancel Order\n");  
             System.out.println("\n===============================\n");
             //System.out.println("\nSelect a choice: "); 
@@ -748,8 +749,8 @@ public static void Menu(Cafe esql, String authorisedUser){
                case 2: PrintFullMenu(esql); break; 
 
                case 3: 
-               String query = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
-               esql.executeQuery(query); 
+               String ord = String.format("INSERT INTO Orders (orderid, login, paid, total) VALUES ('%d', '%s', '%b', '%f')", orderid, authorisedUser, paid, price);
+               esql.executeQuery(ord); 
                System.out.println("\nOrder successfully placed! Your order ID is: " + orderid + "\n"); 
                it=false; 
                break; 
@@ -763,7 +764,7 @@ public static void Menu(Cafe esql, String authorisedUser){
                }
                case 5: 
                   try{
-                     if (auth){
+                     if (auth==true){
                         String unpaid = "SELECT * FROM Orders WHERE paid = 'false' AND timeStampRecieved > now() - interval '24 hours'"; 
                         esql.executeQueryAndPrintResult(unpaid); 
                      }
@@ -802,8 +803,8 @@ public static void Menu(Cafe esql, String authorisedUser){
           System.out.print("\nEnter order id:\n"); 
           String id = in.readLine(); 
           String payquery = String.format("SELECT paid FROM Orders WHERE orderid='%d'", Integer.parseInt(id)); 
-          List<List<String>> result = esql.executeQueryAndReturnResult(query);
- 	        payst = result.get(0).get(0);
+          List<List<String>> result2 = esql.executeQueryAndReturnResult(query);
+ 	        payst = result2.get(0).get(0);
            if (payst=="true"){
               pay = true; 
            } else { pay = false; }
