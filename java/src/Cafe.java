@@ -790,7 +790,8 @@ public static void Menu(Cafe esql, String authorisedUser){
       try{
          boolean it = true; 
          boolean auth = false; 
-         String pay = 'true'; 
+         String payst = null; 
+         boolean pay = false; 
          String userType = null;
  	      String query = String.format("SELECT type FROM Users WHERE login='%s'", authorisedUser);
  	      List<List<String>> result = esql.executeQueryAndReturnResult(query);
@@ -802,7 +803,10 @@ public static void Menu(Cafe esql, String authorisedUser){
           String id = in.readLine(); 
           String payquery = String.format("SELECT paid FROM Orders WHERE orderid='%d'", Integer.parseInt(id)); 
           List<List<String>> result = esql.executeQueryAndReturnResult(query);
- 	        pay = result.get(0).get(0);
+ 	        payst = result.get(0).get(0);
+           if (payst=="true"){
+              pay = true; 
+           } else { pay = false; }
          
          do {
             System.out.print("\n======== UPDATE ORDER =========\n");
@@ -813,7 +817,7 @@ public static void Menu(Cafe esql, String authorisedUser){
             switch(readChoice()){
                case 1: 
                try{
-               if (pay == 'false'){
+               if (!pay){
                      String del = String.format("DELETE * FROM Orders WHERE paid=false AND orderid='%d'", Integer.parseInt(id));
                      esql.executeUpdate(del); 
                }
